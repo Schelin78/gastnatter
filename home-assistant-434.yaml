@@ -1,0 +1,31 @@
+# Lägg i secrets.yaml:
+# ha_434_push_token: "iCNM1bozW72GKyqQCGr2KNDT5EOiSvHV5Q7c2268XLI"
+
+rest_command:
+  push_434_webb:
+    url: "https://DIN-VERCEL-ADRESS.vercel.app/api/push"
+    method: POST
+    headers:
+      authorization: "Bearer {{ ha_434_push_token }}"
+      content-type: "application/json"
+    payload: >-
+      {{
+        {
+          "status": states("sensor.434_novi_434_novi_434namnge_din_enhet_online"),
+          "natter": state_attr("pyscript.gastnatter_kalender_434", "natter") or []
+        } | tojson
+      }}
+
+automation:
+  - alias: "434 - uppdatera webbportal"
+    id: "434_uppdatera_webbportal"
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.434_novi_434_novi_434namnge_din_enhet_online
+          - pyscript.gastnatter_kalender_434
+      - trigger: time_pattern
+        minutes: "/5"
+    actions:
+      - action: rest_command.push_434_webb
