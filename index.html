@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#111111">
-  <title>LÃ¤genhet 434</title>
+  <title>L&#228;genhet 434</title>
   <style>
     :root{
       color-scheme:dark;
@@ -124,7 +124,7 @@
 <body>
 <div class="wrap">
   <div class="toprow">
-    <h1>GÃ¤st- och Ã¤garnÃ¤tter</h1>
+    <h1>G&#228;st- och &#228;garn&#228;tter</h1>
     <div class="status">
       <span id="dot" class="dot"></span>
       <span id="statusText">Ingen data</span>
@@ -134,17 +134,17 @@
   <div class="summary">
     <div class="stats">
       <div class="statrow guest">
-        <div class="iconball guestball">ðŸ‘¤</div>
+        <div class="iconball guestball">&#128100;</div>
         <div>
-          <div class="label">GÃ¤stnÃ¤tter</div>
+          <div class="label">G&#228;stn&#228;tter</div>
           <div class="value" id="guestCount">0</div>
         </div>
       </div>
       <div class="divider"></div>
       <div class="statrow owner">
-        <div class="iconball ownerball">ðŸ </div>
+        <div class="iconball ownerball">&#127968;</div>
         <div>
-          <div class="label">Ã„garnÃ¤tter</div>
+          <div class="label">&#196;garn&#228;tter</div>
           <div class="value" id="ownerCount">0</div>
         </div>
       </div>
@@ -153,57 +153,57 @@
   </div>
 
   <div class="calhead">
-    <button class="navbtn" id="prev">â€¹</button>
+    <button class="navbtn" id="prev">&#8249;</button>
     <div class="month" id="month"></div>
-    <button class="navbtn" id="next">â€º</button>
+    <button class="navbtn" id="next">&#8250;</button>
   </div>
   <div class="todaywrap"><button class="todaybtn" id="today">Idag</button></div>
 
   <div class="weekdays">
     <div class="weeklabel">v</div>
-    <div>MÃ¥n</div><div>Tis</div><div>Ons</div><div>Tor</div><div>Fre</div><div>LÃ¶r</div><div>SÃ¶n</div>
+    <div>M&#229;n</div><div>Tis</div><div>Ons</div><div>Tor</div><div>Fre</div><div>L&#246;r</div><div>S&#246;n</div>
   </div>
   <div class="calendar" id="calendar"></div>
 
   <div class="legend">
-    <span class="g">ðŸ‘¤ GÃ¤stnatt</span>
-    <span class="o">ðŸ  Ã„garnatt</span>
+    <span class="g">&#128100; G&#228;stnatt</span>
+    <span class="o">&#127968; &#196;garnatt</span>
   </div>
 
   <div class="yearcard">
     <div class="yearhead">
       <div>
-        <div class="yeartitle">Ã…rsÃ¶versikt</div>
-        <div class="yearsub">Totalt antal nÃ¤tter per mÃ¥nad</div>
+        <div class="yeartitle">&#197;rs&#246;versikt</div>
+        <div class="yearsub">Totalt antal n&#228;tter per m&#229;nad</div>
       </div>
       <div class="yearnav">
-        <button class="yeararrow" id="yearPrev">â€¹</button>
+        <button class="yeararrow" id="yearPrev">&#8249;</button>
         <div class="yearbox" id="yearLabel"></div>
-        <button class="yeararrow" id="yearNext">â€º</button>
+        <button class="yeararrow" id="yearNext">&#8250;</button>
       </div>
     </div>
     <div class="tablehead">
-      <div>MÃ¥nad</div><div>ðŸ‘¤ GÃ¤st</div><div></div><div>ðŸ  Ã„gare</div><div></div><div>Tot.</div>
+      <div>M&#229;nad</div><div>&#128100; G&#228;st</div><div></div><div>&#127968; &#196;gare</div><div></div><div>Tot.</div>
     </div>
     <div id="yearRows"></div>
   </div>
 
-  <div class="updated" id="updated">VÃ¤ntar pÃ¥ data</div>
+  <div class="updated" id="updated">V&#228;ntar p&#229; data</div>
   <div class="error" id="error"></div>
 </div>
 
 
 <div class="modal" id="nightModal">
  <div class="modalbox">
-  <div class="modaltitle" id="modalTitle">Nattens hÃ¤ndelser</div>
+  <div class="modaltitle" id="modalTitle">Nattens h&#228;ndelser</div>
   <div class="modalsub" id="modalSub"></div>
   <div class="eventbox">
    <div class="period" id="modalPeriod"></div>
-   <div class="eventtitle">HÃ¤ndelser som berÃ¤knar natten</div>
+   <div class="eventtitle">H&#228;ndelser som ber&#228;knar natten</div>
    <div id="modalEvents"></div>
    <div class="korttid" id="modalKorttid"></div>
   </div>
-  <button class="closebtn" id="modalClose">StÃ¤ng</button>
+  <button class="closebtn" id="modalClose">St&#228;ng</button>
  </div>
 </div>
 
@@ -276,7 +276,7 @@ function renderCalendar(){
       const outside=d.getMonth()!==m;
       cell.className='day'+(outside?' outside':'')+(k===todayK?' today':'')+(n?' '+(n.typ==='agare'?'agare':'gast'):'');
       if(!outside){
-        cell.innerHTML=`<div class="daynum">${d.getDate()}</div>` + (n?`<div class="badge">${n.typ==='agare'?'ðŸ  Ã„gare':'ðŸ‘¤ GÃ¤st'}${n.preliminar?' Â· pÃ¥gÃ¥r':''}</div>`:'');
+        cell.innerHTML=`<div class="daynum">${d.getDate()}</div>` + (n?`<div class="badge">${n.typ==='agare'?'\ud83c\udfe0 \u00c4gare':'\ud83d\udc64 G\u00e4st'}${n.preliminar?' \u00b7 p\u00e5g\u00e5r':''}</div>`:'');
         if(n) cell.onclick=()=>openNight(n,d);
       }
       row.appendChild(cell);
@@ -312,23 +312,23 @@ function renderYear(){
 
 
 function openNight(n,d){
-  modalSub.textContent=`LÃ¤genhet 434 Â· ${d.getDate()} ${months[d.getMonth()].toLowerCase()} ${d.getFullYear()}`;
+  modalSub.textContent=`L\u00e4genhet 434 \u00b7 ${d.getDate()} ${months[d.getMonth()].toLowerCase()} ${d.getFullYear()}`;
   const e=new Date(d); e.setDate(e.getDate()+1);
-  modalPeriod.textContent=`Period: ${d.getDate()} ${months[d.getMonth()].slice(0,3).toLowerCase()}. 15:00 â€“ ${e.getDate()} ${months[e.getMonth()].slice(0,3).toLowerCase()}. 12:00`;
-  const events=n.handelser||n.events||n['hÃ¤ndelser']||n.detaljer||[];
+  modalPeriod.textContent=`Period: ${d.getDate()} ${months[d.getMonth()].slice(0,3).toLowerCase()}. 15:00 \u2013 ${e.getDate()} ${months[e.getMonth()].slice(0,3).toLowerCase()}. 12:00`;
+  const events=n.handelser||n.events||n['h\u00e4ndelser']||n.detaljer||[];
   modalEvents.innerHTML='';
   if(Array.isArray(events)&&events.length){
     events.forEach(x=>{
       const row=document.createElement('div'); row.className='eventrow';
       const raw=x.tid||x.time||x.timestamp||'';
       let t=String(raw); const mm=t.match(/(?:T|\\s)(\\d{2}:\\d{2})/); if(mm)t=mm[1];
-      const text=x.text||x.typ||x.type||x.handelse||x['hÃ¤ndelse']||x.status||'HÃ¤ndelse';
-      row.innerHTML=`<div class="eventtime">${t}</div><div>${text}${(x.uppskattad||x.estimated)?' <span class="estimated">Â· uppskattad</span>':''}</div>`;
+      const text=x.text||x.typ||x.type||x.handelse||x['h\u00e4ndelse']||x.status||'H\u00e4ndelse';
+      row.innerHTML=`<div class="eventtime">${t}</div><div>${text}${(x.uppskattad||x.estimated)?' <span class="estimated">\u00b7 uppskattad</span>':''}</div>`;
       modalEvents.appendChild(row);
     });
-  } else modalEvents.innerHTML='<div class="estimated">Inga detaljerade hÃ¤ndelser finns fÃ¶r natten.</div>';
+  } else modalEvents.innerHTML='<div class="estimated">Inga detaljerade h\u00e4ndelser finns f\u00f6r natten.</div>';
   const kt=n.korttid||n.kort_tid||n.duration||n.beraknad_korttid;
-  modalKorttid.textContent=kt?`BerÃ¤knad korttid: ${kt}`:`${n.typ==='agare'?'ðŸ  Ã„garnatt':'ðŸ‘¤ GÃ¤stnatt'}${n.preliminar?' Â· pÃ¥gÃ¥r':''}`;
+  modalKorttid.textContent=kt?`Ber\u00e4knad korttid: ${kt}`:`${n.typ==='agare'?'\ud83c\udfe0 \u00c4garnatt':'\ud83d\udc64 G\u00e4stnatt'}${n.preliminar?' \u00b7 p\u00e5g\u00e5r':''}`;
   nightModal.classList.add('open');
 }
 modalClose.onclick=()=>nightModal.classList.remove('open');
@@ -344,16 +344,16 @@ async function load(){
 
     const on=String(data.status||'').toLowerCase()==='on';
     dot.className='dot'+(on?' on':'');
-    statusText.textContent=on?'KortstrÃ¶m aktiv':'KortstrÃ¶m av';
+    statusText.textContent=on?'Kortstr\u00f6m aktiv':'Kortstr\u00f6m av';
 
     updated.textContent=data.uppdaterad
       ? `Senast uppdaterad ${new Date(data.uppdaterad).toLocaleString('sv-SE')}`
-      : 'Ingen uppdatering Ã¤nnu';
+      : 'Ingen uppdatering \u00e4nnu';
 
     error.style.display='none';
     render();
   }catch(err){
-    error.textContent='Kunde inte hÃ¤mta data: '+err.message;
+    error.textContent='Kunde inte h\u00e4mta data: '+err.message;
     error.style.display='block';
   }
 }
