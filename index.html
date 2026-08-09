@@ -2,566 +2,319 @@
 <html lang="sv">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#111827">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
   <title>Lägenhet 434</title>
-
   <style>
     :root{
       color-scheme:dark;
-      --bg:#0b1020;
-      --card:#121a2b;
-      --card2:#182238;
-      --text:#f8fafc;
-      --muted:#9aa7bd;
-      --guest:#60a5fa;
-      --owner:#f59e0b;
-      --ok:#34d399;
-      --line:#26344f
+      --bg:#111111;
+      --panel:#1b1b1b;
+      --panel2:#242424;
+      --text:#f3f3f3;
+      --muted:#9a9a9a;
+      --line:#353535;
+      --guest:#1da1f2;
+      --owner:#ff9f00;
+      --today:#00a9e8;
+      --ok:#4caf50;
     }
-
     *{box-sizing:border-box}
-
-    body{
-      margin:0;
-      background:linear-gradient(180deg,#0b1020,#101827);
-      color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:720px;margin:0 auto;padding:12px 16px 40px}
+    h1{margin:0 0 18px;font-size:30px;font-weight:800;letter-spacing:-.02em}
+    .toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+    .status{display:flex;align-items:center;gap:8px;color:#ddd;font-weight:650;font-size:14px;white-space:nowrap}
+    .dot{width:11px;height:11px;border-radius:50%;background:#666}
+    .dot.on{background:var(--ok);box-shadow:0 0 10px rgba(76,175,80,.55)}
+    .summary{border:1px solid var(--line);border-radius:28px;padding:24px 18px 18px;background:var(--panel);margin-bottom:26px}
+    .stats{display:grid;grid-template-columns:1fr 1px 1fr;align-items:center;gap:16px}
+    .divider{height:108px;background:var(--line)}
+    .statrow{display:flex;align-items:center;gap:12px}
+    .iconball{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;font-size:38px;flex:0 0 auto}
+    .guestball{background:rgba(29,161,242,.18)}
+    .ownerball{background:rgba(255,159,0,.18)}
+    .label{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+    .guest .label,.guest .value{color:var(--guest)}
+    .owner .label,.owner .value{color:var(--owner)}
+    .value{font-size:52px;line-height:.95;font-weight:800;margin-top:3px}
+    .summarymonth{text-align:center;color:#9d9d9d;font-size:20px;margin-top:14px}
+    .calhead{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;gap:8px;margin:4px 0 12px}
+    .navbtn{border:0;background:transparent;color:var(--text);font-size:38px;line-height:1;padding:6px;cursor:pointer}
+    .month{text-align:center;font-size:31px;font-weight:800;text-transform:capitalize}
+    .todaywrap{text-align:center;margin-bottom:22px}
+    .todaybtn{border:0;border-radius:16px;background:var(--panel2);color:var(--text);font-size:18px;padding:12px 24px;cursor:pointer}
+    .weekdays,.weekrow{display:grid;grid-template-columns:54px repeat(7,1fr);gap:7px;align-items:stretch}
+    .weekdays{margin-bottom:8px}
+    .weekdays div{text-align:center;color:#a3a3a3;font-size:18px;padding:6px 0}
+    .weekdays .weeklabel{font-weight:700;color:#777}
+    .calendar{display:grid;gap:9px}
+    .weeknum{color:#777;font-weight:750;font-size:15px;display:flex;align-items:flex-start;justify-content:center;padding-top:12px}
+    .day{min-height:104px;border-radius:18px;background:var(--panel2);border:2px solid transparent;position:relative;padding:10px 8px;overflow:hidden}
+    .day.outside{opacity:0;pointer-events:none}
+    .day.today{border-color:var(--today)}
+    .day.gast{background:linear-gradient(180deg,rgba(29,161,242,.28),var(--panel2) 72%)}
+    .day.agare{background:linear-gradient(180deg,rgba(255,159,0,.26),var(--panel2) 72%)}
+    .daynum{font-size:26px;line-height:1;position:relative;z-index:2}
+    .badge{position:absolute;left:8px;right:8px;bottom:8px;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .gast .badge{color:var(--guest)}
+    .agare .badge{color:var(--owner)}
+    .legend{display:flex;gap:24px;justify-content:center;align-items:center;font-weight:750;font-size:18px;margin:26px 0 30px}
+    .legend .g{color:var(--guest)}
+    .legend .o{color:var(--owner)}
+    .yearcard{border:1px solid var(--line);border-radius:28px;overflow:hidden;background:var(--panel)}
+    .yearhead{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;padding:24px 24px 18px;border-bottom:1px solid var(--line)}
+    .yeartitle{font-size:27px;font-weight:800}
+    .yearsub{color:#aaa;font-size:18px;margin-top:3px}
+    .yearnav{display:flex;align-items:center;gap:10px}
+    .yearbox{min-width:116px;text-align:center;border-radius:16px;background:var(--panel2);padding:13px 18px;font-size:23px;font-weight:800}
+    .yeararrow{border:0;background:transparent;color:var(--text);font-size:32px;cursor:pointer;padding:2px 6px}
+    .tablehead,.monthrow{display:grid;grid-template-columns:140px 1fr 44px 1fr 44px 44px;align-items:center;gap:8px}
+    .tablehead{padding:16px 14px;color:#9d9d9d;font-size:14px;font-weight:800;border-bottom:1px solid var(--line)}
+    .monthrow{min-height:74px;padding:12px 14px;border-bottom:1px solid var(--line)}
+    .monthrow:last-child{border-bottom:0}
+    .monthrow.current{background:#20303c;box-shadow:inset 5px 0 0 #1da1f2}
+    .monthname{font-size:20px;font-weight:800}
+    .bar{height:18px;border-radius:999px;background:#272727;overflow:hidden}
+    .fill{height:100%;border-radius:999px;width:0}
+    .guestfill{background:var(--guest)}
+    .ownerfill{background:var(--owner)}
+    .num{text-align:right;font-size:18px;font-variant-numeric:tabular-nums}
+    .tot{font-weight:800}
+    .updated{color:#777;text-align:center;font-size:12px;margin-top:16px}
+    .error{display:none;margin-top:14px;padding:12px;border-radius:12px;background:#3d1515;color:#ffd0d0}
+    @media(max-width:560px){
+      .wrap{padding:10px 16px 34px}
+      h1{font-size:28px}
+      .summary{padding:20px 16px 16px}
+      .iconball{width:66px;height:66px;font-size:34px}
+      .value{font-size:48px}
+      .month{font-size:28px}
+      .weekdays,.weekrow{grid-template-columns:50px repeat(7,1fr);gap:7px}
+      .day{min-height:102px;border-radius:17px;padding:10px 8px}
+      .daynum{font-size:25px}
+      .badge{font-size:13px}
+      .tablehead,.monthrow{grid-template-columns:110px 1fr 34px 1fr 34px 34px;gap:6px}
+      .monthname{font-size:18px}
+      .yearhead{padding:20px 18px 16px}
     }
-
-    .wrap{
-      max-width:760px;
-      margin:auto;
-      padding:18px 14px 40px
-    }
-
-    .card{
-      background:rgba(18,26,43,.94);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:18px
-    }
-
-    .head{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between
-    }
-
-    h1{
-      margin:0;
-      font-size:28px
-    }
-
-    .sub{
-      color:var(--muted);
-      margin-top:4px
-    }
-
-    .status{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:9px 12px;
-      border-radius:999px;
-      background:var(--card2);
-      font-weight:650
-    }
-
-    .dot{
-      width:10px;
-      height:10px;
-      border-radius:50%;
-      background:#64748b
-    }
-
-    .dot.on{
-      background:var(--ok);
-      box-shadow:0 0 14px rgba(52,211,153,.65)
-    }
-
-    .stats{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:16px
-    }
-
-    .stat{
-      padding:14px;
-      border-radius:16px;
-      background:var(--card2);
-      border:1px solid var(--line)
-    }
-
-    .stat .label{
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      color:var(--muted)
-    }
-
-    .stat .value{
-      font-size:34px;
-      font-weight:780;
-      margin-top:4px
-    }
-
-    .stat.guest .value{
-      color:var(--guest)
-    }
-
-    .stat.owner .value{
-      color:var(--owner)
-    }
-
-    .calhead{
-      display:grid;
-      grid-template-columns:44px 1fr 44px;
-      align-items:center;
-      margin:18px 0 8px
-    }
-
-    .calhead button{
-      border:0;
-      background:transparent;
-      color:var(--text);
-      font-size:28px
-    }
-
-    .month{
-      text-align:center;
-      font-size:20px;
-      font-weight:700;
-      text-transform:capitalize
-    }
-
-    .weekdays,
-    .calendar{
-      display:grid;
-      grid-template-columns:repeat(7,1fr);
-      gap:6px
-    }
-
-    .weekdays div{
-      text-align:center;
-      color:var(--muted);
-      font-size:12px;
-      padding:5px 0
-    }
-
-    .day{
-      min-height:64px;
-      border-radius:12px;
-      background:var(--card2);
-      padding:7px;
-      position:relative;
-      border:1px solid transparent
-    }
-
-    .day.empty{
-      visibility:hidden
-    }
-
-    .day.today{
-      border-color:#93c5fd
-    }
-
-    .day.gast{
-      background:linear-gradient(
-        180deg,
-        rgba(96,165,250,.24),
-        rgba(24,34,56,.92)
-      )
-    }
-
-    .day.agare{
-      background:linear-gradient(
-        180deg,
-        rgba(245,158,11,.23),
-        rgba(24,34,56,.92)
-      )
-    }
-
-    .badge{
-      position:absolute;
-      left:4px;
-      right:4px;
-      bottom:6px;
-      text-align:center;
-      font-size:11px;
-      font-weight:700
-    }
-
-    .gast .badge{
-      color:var(--guest)
-    }
-
-    .agare .badge{
-      color:var(--owner)
-    }
-
-    .legend{
-      display:flex;
-      gap:18px;
-      justify-content:center;
-      color:var(--muted);
-      font-size:13px;
-      margin:12px 0 0
-    }
-
-    .updated{
-      color:var(--muted);
-      font-size:12px;
-      text-align:center;
-      margin-top:14px
-    }
-
-    .error{
-      display:none;
-      margin-top:14px;
-      padding:12px;
-      background:#3b1620;
-      border-radius:12px;
-      color:#fecdd3
-    }
-
-    @media(max-width:460px){
-      .wrap{
-        padding:10px 8px 28px
-      }
-
-      .card{
-        padding:13px
-      }
-
-      .head{
-        align-items:flex-start
-      }
-
-      h1{
-        font-size:23px
-      }
-
-      .status{
-        font-size:12px
-      }
-
-      .day{
-        min-height:54px
-      }
-
-      .badge{
-        font-size:10px
-      }
+    @media(max-width:410px){
+      .weekdays,.weekrow{grid-template-columns:42px repeat(7,1fr);gap:5px}
+      .day{min-height:90px;border-radius:15px;padding:8px 6px}
+      .daynum{font-size:22px}
+      .badge{font-size:11px;left:5px;right:5px;bottom:7px}
+      .tablehead,.monthrow{grid-template-columns:94px 1fr 28px 1fr 28px 30px;gap:5px;padding-left:10px;padding-right:10px}
+      .monthname{font-size:17px}
     }
   </style>
 </head>
-
 <body>
-
 <div class="wrap">
-  <div class="card">
-
-    <div class="head">
-      <div>
-        <h1>Lägenhet 434</h1>
-        <div class="sub">Gäst- och ägarnätter</div>
-      </div>
-
-      <div class="status">
-        <span id="dot" class="dot"></span>
-        <span id="statusText">Ingen data</span>
-      </div>
+  <div class="toprow">
+    <h1>Gäst- och ägarnätter</h1>
+    <div class="status">
+      <span id="dot" class="dot"></span>
+      <span id="statusText">Ingen data</span>
     </div>
-
-    <div class="stats">
-      <div class="stat guest">
-        <div class="label">Gästnätter</div>
-        <div class="value" id="guestCount">0</div>
-      </div>
-
-      <div class="stat owner">
-        <div class="label">Ägarnätter</div>
-        <div class="value" id="ownerCount">0</div>
-      </div>
-    </div>
-
-    <div class="calhead">
-      <button id="prev">‹</button>
-      <div class="month" id="month"></div>
-      <button id="next">›</button>
-    </div>
-
-    <div class="weekdays">
-      <div>Mån</div>
-      <div>Tis</div>
-      <div>Ons</div>
-      <div>Tor</div>
-      <div>Fre</div>
-      <div>Lör</div>
-      <div>Sön</div>
-    </div>
-
-    <div class="calendar" id="calendar"></div>
-
-    <div class="legend">
-      <span>👤 Gästnatt</span>
-      <span>🏠 Ägarnatt</span>
-    </div>
-
-    <div class="updated" id="updated">
-      Väntar på data
-    </div>
-
-    <div class="error" id="error"></div>
-
   </div>
+
+  <div class="summary">
+    <div class="stats">
+      <div class="statrow guest">
+        <div class="iconball guestball">👤</div>
+        <div>
+          <div class="label">Gästnätter</div>
+          <div class="value" id="guestCount">0</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="statrow owner">
+        <div class="iconball ownerball">🏠</div>
+        <div>
+          <div class="label">Ägarnätter</div>
+          <div class="value" id="ownerCount">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="summarymonth" id="summaryMonth"></div>
+  </div>
+
+  <div class="calhead">
+    <button class="navbtn" id="prev">‹</button>
+    <div class="month" id="month"></div>
+    <button class="navbtn" id="next">›</button>
+  </div>
+  <div class="todaywrap"><button class="todaybtn" id="today">Idag</button></div>
+
+  <div class="weekdays">
+    <div class="weeklabel">v</div>
+    <div>Mån</div><div>Tis</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lör</div><div>Sön</div>
+  </div>
+  <div class="calendar" id="calendar"></div>
+
+  <div class="legend">
+    <span class="g">👤 Gästnatt</span>
+    <span class="o">🏠 Ägarnatt</span>
+  </div>
+
+  <div class="yearcard">
+    <div class="yearhead">
+      <div>
+        <div class="yeartitle">Årsöversikt</div>
+        <div class="yearsub">Totalt antal nätter per månad</div>
+      </div>
+      <div class="yearnav">
+        <button class="yeararrow" id="yearPrev">‹</button>
+        <div class="yearbox" id="yearLabel"></div>
+        <button class="yeararrow" id="yearNext">›</button>
+      </div>
+    </div>
+    <div class="tablehead">
+      <div>Månad</div><div>👤 Gäst</div><div></div><div>🏠 Ägare</div><div></div><div>Tot.</div>
+    </div>
+    <div id="yearRows"></div>
+  </div>
+
+  <div class="updated" id="updated">Väntar på data</div>
+  <div class="error" id="error"></div>
 </div>
 
 <script>
-
 let data = { natter: [] };
+let view = new Date(); view.setDate(1);
+let yearView = view.getFullYear();
 
-let view = new Date();
-view.setDate(1);
+const months = ['Januari','Februari','Mars','April','Maj','Juni','Juli','Augusti','September','Oktober','November','December'];
+const key=(y,m,d)=>`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 
-const key = (y,m,d) =>
-  `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+function isoWeekNumber(date){
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const y0 = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return Math.ceil((((d-y0)/86400000)+1)/7);
+}
 
-function render(){
-
-  const y = view.getFullYear();
-  const m = view.getMonth();
-
-  month.textContent =
-    new Intl.DateTimeFormat(
-      'sv-SE',
-      {
-        month:'long',
-        year:'numeric'
-      }
-    ).format(view);
-
-  const map =
-    new Map(
-      (data.natter || [])
-      .map(n => [
-        String(n.datum).slice(0,10),
-        n
-      ])
-    );
-
-  let g = 0;
-  let o = 0;
-
-  for(const n of data.natter || []){
-
-    const d =
-      new Date(
-        String(n.datum).slice(0,10)
-        + 'T12:00:00'
-      );
-
-    if(
-      d.getFullYear() === y &&
-      d.getMonth() === m
-    ){
-      n.typ === 'agare'
-        ? o++
-        : g++;
+function monthCounts(y,m){
+  let g=0,o=0;
+  for(const n of data.natter||[]){
+    const d = new Date(String(n.datum).slice(0,10)+'T12:00:00');
+    if(d.getFullYear()===y && d.getMonth()===m){
+      if(n.typ==='agare') o++; else g++;
     }
   }
+  return {g,o};
+}
 
-  guestCount.textContent = g;
-  ownerCount.textContent = o;
+function renderCalendar(){
+  const y=view.getFullYear(), m=view.getMonth();
+  const fmt=new Intl.DateTimeFormat('sv-SE',{month:'long',year:'numeric'});
+  const title=fmt.format(view);
+  month.textContent=title;
+  summaryMonth.textContent=title.charAt(0).toUpperCase()+title.slice(1);
 
-  const first =
-    new Date(y,m,1);
+  const c=monthCounts(y,m);
+  guestCount.textContent=c.g;
+  ownerCount.textContent=c.o;
 
-  const days =
-    new Date(y,m+1,0).getDate();
+  const map=new Map((data.natter||[]).map(n=>[String(n.datum).slice(0,10),n]));
+  const first=new Date(y,m,1);
+  const last=new Date(y,m+1,0);
+  const start=new Date(first);
+  start.setDate(first.getDate()-((first.getDay()+6)%7));
+  const end=new Date(last);
+  end.setDate(last.getDate()+(7-((last.getDay()+6)%7)-1));
 
-  const off =
-    (first.getDay()+6)%7;
+  const todayD=new Date();
+  const todayK=key(todayD.getFullYear(),todayD.getMonth(),todayD.getDate());
 
-  const t =
-    new Date();
+  calendar.innerHTML='';
+  let cur=new Date(start);
+  while(cur<=end){
+    const row=document.createElement('div');
+    row.className='weekrow';
 
-  const tk =
-    key(
-      t.getFullYear(),
-      t.getMonth(),
-      t.getDate()
-    );
+    const wn=document.createElement('div');
+    wn.className='weeknum';
+    wn.textContent='v'+isoWeekNumber(cur);
+    row.appendChild(wn);
 
-  calendar.innerHTML = '';
-
-  for(let i=0;i<off;i++){
-
-    let e =
-      document.createElement('div');
-
-    e.className =
-      'day empty';
-
-    calendar.appendChild(e);
-  }
-
-  for(let d=1;d<=days;d++){
-
-    const k =
-      key(y,m,d);
-
-    const n =
-      map.get(k);
-
-    const e =
-      document.createElement('div');
-
-    e.className =
-      'day'
-      + (k===tk ? ' today' : '')
-      + (
-        n
-        ? ' ' + (
-            n.typ === 'agare'
-            ? 'agare'
-            : 'gast'
-          )
-        : ''
-      );
-
-    e.innerHTML =
-      `<span>${d}</span>`
-      +
-      (
-        n
-        ?
-        `<span class="badge">
-          ${
-            n.typ === 'agare'
-            ? '🏠 Ägare'
-            : '👤 Gäst'
-          }
-          ${
-            n.preliminar
-            ? ' · pågår'
-            : ''
-          }
-        </span>`
-        :
-        ''
-      );
-
-    calendar.appendChild(e);
+    for(let i=0;i<7;i++){
+      const d=new Date(cur);
+      d.setDate(cur.getDate()+i);
+      const k=key(d.getFullYear(),d.getMonth(),d.getDate());
+      const n=map.get(k);
+      const cell=document.createElement('div');
+      const outside=d.getMonth()!==m;
+      cell.className='day'+(outside?' outside':'')+(k===todayK?' today':'')+(n?' '+(n.typ==='agare'?'agare':'gast'):'');
+      if(!outside){
+        cell.innerHTML=`<div class="daynum">${d.getDate()}</div>` + (n?`<div class="badge">${n.typ==='agare'?'🏠 Ägare':'👤 Gäst'}${n.preliminar?' · pågår':''}</div>`:'');
+      }
+      row.appendChild(cell);
+    }
+    calendar.appendChild(row);
+    cur.setDate(cur.getDate()+7);
   }
 }
 
+function renderYear(){
+  yearLabel.textContent=yearView;
+  yearRows.innerHTML='';
+
+  const counts=Array.from({length:12},(_,m)=>monthCounts(yearView,m));
+  const max=Math.max(1,...counts.flatMap(x=>[x.g,x.o]));
+  const now=new Date();
+
+  counts.forEach((c,m)=>{
+    const row=document.createElement('div');
+    row.className='monthrow'+(yearView===now.getFullYear() && m===now.getMonth()?' current':'');
+    const gp=Math.round(c.g/max*100);
+    const op=Math.round(c.o/max*100);
+    row.innerHTML=`
+      <div class="monthname">${months[m]}</div>
+      <div class="bar"><div class="fill guestfill" style="width:${gp}%"></div></div>
+      <div class="num">${c.g}</div>
+      <div class="bar"><div class="fill ownerfill" style="width:${op}%"></div></div>
+      <div class="num">${c.o}</div>
+      <div class="num tot">${c.g+c.o}</div>`;
+    yearRows.appendChild(row);
+  });
+}
+
+function render(){ renderCalendar(); renderYear(); }
 
 async function load(){
-
   try{
+    const r=await fetch('https://dblgbnfpdbbsafzdeooc.supabase.co/functions/v1/public-434',{cache:'no-store'});
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    data=await r.json();
 
-    const r =
-      await fetch(
-        'https://dblgbnfpdbbsafzdeooc.supabase.co/functions/v1/public-434',
-        {
-          cache:'no-store'
-        }
-      );
+    const on=String(data.status||'').toLowerCase()==='on';
+    dot.className='dot'+(on?' on':'');
+    statusText.textContent=on?'Kortström aktiv':'Kortström av';
 
-    if(!r.ok){
-      throw new Error(
-        `HTTP ${r.status}`
-      );
-    }
+    updated.textContent=data.uppdaterad
+      ? `Senast uppdaterad ${new Date(data.uppdaterad).toLocaleString('sv-SE')}`
+      : 'Ingen uppdatering ännu';
 
-    data =
-      await r.json();
-
-    const on =
-      String(
-        data.status || ''
-      ).toLowerCase() === 'on';
-
-    dot.className =
-      'dot'
-      + (
-        on
-        ? ' on'
-        : ''
-      );
-
-    statusText.textContent =
-      on
-      ? 'Kortström aktiv'
-      : 'Kortström av';
-
-    updated.textContent =
-      data.uppdaterad
-      ?
-      `Senast uppdaterad ${
-        new Date(
-          data.uppdaterad
-        ).toLocaleString('sv-SE')
-      }`
-      :
-      'Ingen uppdatering ännu';
-
-    error.style.display =
-      'none';
-
+    error.style.display='none';
     render();
-
-  }
-  catch(err){
-
-    error.textContent =
-      'Kunde inte hämta data: '
-      + err.message;
-
-    error.style.display =
-      'block';
+  }catch(err){
+    error.textContent='Kunde inte hämta data: '+err.message;
+    error.style.display='block';
   }
 }
 
-
-prev.onclick = () => {
-
-  view =
-    new Date(
-      view.getFullYear(),
-      view.getMonth()-1,
-      1
-    );
-
-  render();
-};
-
-
-next.onclick = () => {
-
-  view =
-    new Date(
-      view.getFullYear(),
-      view.getMonth()+1,
-      1
-    );
-
-  render();
-};
-
+prev.onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);yearView=view.getFullYear();render();}
+next.onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);yearView=view.getFullYear();render();}
+today.onclick=()=>{view=new Date();view.setDate(1);yearView=view.getFullYear();render();}
+yearPrev.onclick=()=>{yearView--;renderYear();}
+yearNext.onclick=()=>{yearView++;renderYear();}
 
 load();
-
-setInterval(
-  load,
-  30000
-);
-
+setInterval(load,30000);
 </script>
-
 </body>
 </html>
+
+
