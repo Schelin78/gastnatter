@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#111111">
-  <title>Lägenhet 434</title>
+  <title>LÃ¤genhet 434</title>
   <style>
     :root{
       color-scheme:dark;
@@ -83,6 +83,19 @@
     .tot{font-weight:800}
     .updated{color:#777;text-align:center;font-size:12px;margin-top:16px}
     .error{display:none;margin-top:14px;padding:12px;border-radius:12px;background:#3d1515;color:#ffd0d0}
+    .day:not(.outside){cursor:pointer}
+    .modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.72);align-items:center;justify-content:center;padding:18px}
+    .modal.open{display:flex}
+    .modalbox{width:min(630px,100%);max-height:88vh;overflow:auto;background:#1b1b1b;border-radius:28px;padding:28px 24px;border:1px solid #353535}
+    .modaltitle{font-size:30px;font-weight:800;margin-bottom:8px}
+    .modalsub{font-size:20px;color:#aaa;margin-bottom:24px}
+    .eventbox{border:1px solid #444;border-radius:22px;background:#242424;padding:20px}
+    .period{color:#aaa;font-size:17px;margin-bottom:22px}
+    .eventtitle{font-size:20px;font-weight:800;margin-bottom:14px}
+    .eventrow{display:grid;grid-template-columns:92px 1fr;gap:10px;font-size:19px;padding:7px 0}
+    .eventtime{font-weight:800}.estimated{color:#999}
+    .korttid{border-top:1px solid #444;margin-top:14px;padding-top:16px;font-size:20px;font-weight:800}
+    .closebtn{width:100%;border:0;background:transparent;color:#aaa;font-size:20px;padding:22px 0 4px;cursor:pointer}
     @media(max-width:560px){
       .wrap{padding:10px 16px 34px}
       h1{font-size:28px}
@@ -111,7 +124,7 @@
 <body>
 <div class="wrap">
   <div class="toprow">
-    <h1>Gäst- och ägarnätter</h1>
+    <h1>GÃ¤st- och Ã¤garnÃ¤tter</h1>
     <div class="status">
       <span id="dot" class="dot"></span>
       <span id="statusText">Ingen data</span>
@@ -121,17 +134,17 @@
   <div class="summary">
     <div class="stats">
       <div class="statrow guest">
-        <div class="iconball guestball">👤</div>
+        <div class="iconball guestball">ðŸ‘¤</div>
         <div>
-          <div class="label">Gästnätter</div>
+          <div class="label">GÃ¤stnÃ¤tter</div>
           <div class="value" id="guestCount">0</div>
         </div>
       </div>
       <div class="divider"></div>
       <div class="statrow owner">
-        <div class="iconball ownerball">🏠</div>
+        <div class="iconball ownerball">ðŸ </div>
         <div>
-          <div class="label">Ägarnätter</div>
+          <div class="label">Ã„garnÃ¤tter</div>
           <div class="value" id="ownerCount">0</div>
         </div>
       </div>
@@ -140,43 +153,58 @@
   </div>
 
   <div class="calhead">
-    <button class="navbtn" id="prev">‹</button>
+    <button class="navbtn" id="prev">â€¹</button>
     <div class="month" id="month"></div>
-    <button class="navbtn" id="next">›</button>
+    <button class="navbtn" id="next">â€º</button>
   </div>
   <div class="todaywrap"><button class="todaybtn" id="today">Idag</button></div>
 
   <div class="weekdays">
     <div class="weeklabel">v</div>
-    <div>Mån</div><div>Tis</div><div>Ons</div><div>Tor</div><div>Fre</div><div>Lör</div><div>Sön</div>
+    <div>MÃ¥n</div><div>Tis</div><div>Ons</div><div>Tor</div><div>Fre</div><div>LÃ¶r</div><div>SÃ¶n</div>
   </div>
   <div class="calendar" id="calendar"></div>
 
   <div class="legend">
-    <span class="g">👤 Gästnatt</span>
-    <span class="o">🏠 Ägarnatt</span>
+    <span class="g">ðŸ‘¤ GÃ¤stnatt</span>
+    <span class="o">ðŸ  Ã„garnatt</span>
   </div>
 
   <div class="yearcard">
     <div class="yearhead">
       <div>
-        <div class="yeartitle">Årsöversikt</div>
-        <div class="yearsub">Totalt antal nätter per månad</div>
+        <div class="yeartitle">Ã…rsÃ¶versikt</div>
+        <div class="yearsub">Totalt antal nÃ¤tter per mÃ¥nad</div>
       </div>
       <div class="yearnav">
-        <button class="yeararrow" id="yearPrev">‹</button>
+        <button class="yeararrow" id="yearPrev">â€¹</button>
         <div class="yearbox" id="yearLabel"></div>
-        <button class="yeararrow" id="yearNext">›</button>
+        <button class="yeararrow" id="yearNext">â€º</button>
       </div>
     </div>
     <div class="tablehead">
-      <div>Månad</div><div>👤 Gäst</div><div></div><div>🏠 Ägare</div><div></div><div>Tot.</div>
+      <div>MÃ¥nad</div><div>ðŸ‘¤ GÃ¤st</div><div></div><div>ðŸ  Ã„gare</div><div></div><div>Tot.</div>
     </div>
     <div id="yearRows"></div>
   </div>
 
-  <div class="updated" id="updated">Väntar på data</div>
+  <div class="updated" id="updated">VÃ¤ntar pÃ¥ data</div>
   <div class="error" id="error"></div>
+</div>
+
+
+<div class="modal" id="nightModal">
+ <div class="modalbox">
+  <div class="modaltitle" id="modalTitle">Nattens hÃ¤ndelser</div>
+  <div class="modalsub" id="modalSub"></div>
+  <div class="eventbox">
+   <div class="period" id="modalPeriod"></div>
+   <div class="eventtitle">HÃ¤ndelser som berÃ¤knar natten</div>
+   <div id="modalEvents"></div>
+   <div class="korttid" id="modalKorttid"></div>
+  </div>
+  <button class="closebtn" id="modalClose">StÃ¤ng</button>
+ </div>
 </div>
 
 <script>
@@ -248,7 +276,8 @@ function renderCalendar(){
       const outside=d.getMonth()!==m;
       cell.className='day'+(outside?' outside':'')+(k===todayK?' today':'')+(n?' '+(n.typ==='agare'?'agare':'gast'):'');
       if(!outside){
-        cell.innerHTML=`<div class="daynum">${d.getDate()}</div>` + (n?`<div class="badge">${n.typ==='agare'?'🏠 Ägare':'👤 Gäst'}${n.preliminar?' · pågår':''}</div>`:'');
+        cell.innerHTML=`<div class="daynum">${d.getDate()}</div>` + (n?`<div class="badge">${n.typ==='agare'?'ðŸ  Ã„gare':'ðŸ‘¤ GÃ¤st'}${n.preliminar?' Â· pÃ¥gÃ¥r':''}</div>`:'');
+        if(n) cell.onclick=()=>openNight(n,d);
       }
       row.appendChild(cell);
     }
@@ -281,6 +310,30 @@ function renderYear(){
   });
 }
 
+
+function openNight(n,d){
+  modalSub.textContent=`LÃ¤genhet 434 Â· ${d.getDate()} ${months[d.getMonth()].toLowerCase()} ${d.getFullYear()}`;
+  const e=new Date(d); e.setDate(e.getDate()+1);
+  modalPeriod.textContent=`Period: ${d.getDate()} ${months[d.getMonth()].slice(0,3).toLowerCase()}. 15:00 â€“ ${e.getDate()} ${months[e.getMonth()].slice(0,3).toLowerCase()}. 12:00`;
+  const events=n.handelser||n.events||n['hÃ¤ndelser']||n.detaljer||[];
+  modalEvents.innerHTML='';
+  if(Array.isArray(events)&&events.length){
+    events.forEach(x=>{
+      const row=document.createElement('div'); row.className='eventrow';
+      const raw=x.tid||x.time||x.timestamp||'';
+      let t=String(raw); const mm=t.match(/(?:T|\\s)(\\d{2}:\\d{2})/); if(mm)t=mm[1];
+      const text=x.text||x.typ||x.type||x.handelse||x['hÃ¤ndelse']||x.status||'HÃ¤ndelse';
+      row.innerHTML=`<div class="eventtime">${t}</div><div>${text}${(x.uppskattad||x.estimated)?' <span class="estimated">Â· uppskattad</span>':''}</div>`;
+      modalEvents.appendChild(row);
+    });
+  } else modalEvents.innerHTML='<div class="estimated">Inga detaljerade hÃ¤ndelser finns fÃ¶r natten.</div>';
+  const kt=n.korttid||n.kort_tid||n.duration||n.beraknad_korttid;
+  modalKorttid.textContent=kt?`BerÃ¤knad korttid: ${kt}`:`${n.typ==='agare'?'ðŸ  Ã„garnatt':'ðŸ‘¤ GÃ¤stnatt'}${n.preliminar?' Â· pÃ¥gÃ¥r':''}`;
+  nightModal.classList.add('open');
+}
+modalClose.onclick=()=>nightModal.classList.remove('open');
+nightModal.onclick=e=>{if(e.target===nightModal)nightModal.classList.remove('open');};
+
 function render(){ renderCalendar(); renderYear(); }
 
 async function load(){
@@ -291,16 +344,16 @@ async function load(){
 
     const on=String(data.status||'').toLowerCase()==='on';
     dot.className='dot'+(on?' on':'');
-    statusText.textContent=on?'Kortström aktiv':'Kortström av';
+    statusText.textContent=on?'KortstrÃ¶m aktiv':'KortstrÃ¶m av';
 
     updated.textContent=data.uppdaterad
       ? `Senast uppdaterad ${new Date(data.uppdaterad).toLocaleString('sv-SE')}`
-      : 'Ingen uppdatering ännu';
+      : 'Ingen uppdatering Ã¤nnu';
 
     error.style.display='none';
     render();
   }catch(err){
-    error.textContent='Kunde inte hämta data: '+err.message;
+    error.textContent='Kunde inte hÃ¤mta data: '+err.message;
     error.style.display='block';
   }
 }
@@ -316,5 +369,3 @@ setInterval(load,30000);
 </script>
 </body>
 </html>
-
-
